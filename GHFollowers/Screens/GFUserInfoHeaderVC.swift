@@ -20,7 +20,6 @@ class GFUserInfoHeaderVC: UIViewController {
     init(user: User) {
         super.init(nibName: nil, bundle: nil)
         self.user = user
-        print("**** Initialized!")
     }
 
     required init?(coder: NSCoder) {
@@ -29,7 +28,7 @@ class GFUserInfoHeaderVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureVC()
+        setupSubviews()
         layoutUI()
         configureUIElements()
     }
@@ -45,7 +44,7 @@ class GFUserInfoHeaderVC: UIViewController {
         locationImageView.tintColor = .secondaryLabel
     }
 
-    private func configureVC() {
+    private func setupSubviews() {
         view.addSubview(avatarImageView)
         view.addSubview(usernameLabel)
         view.addSubview(nameLabel)

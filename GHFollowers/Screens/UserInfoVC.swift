@@ -27,7 +27,6 @@ class UserInfoVC: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let user):
-                print(user)
                 DispatchQueue.main.async {
                     self.add(childVC: GFUserInfoHeaderVC(user: user), to: self.headerView)
                 }
@@ -35,7 +34,6 @@ class UserInfoVC: UIViewController {
                 self.presentGFAlertOnMainThread(title: "I don't know what happened!?!? 🤯", message: error.rawValue, buttonTitle: "OK")
             }
         }
-        print(username!)
     }
     
     private func layoutUI() {
