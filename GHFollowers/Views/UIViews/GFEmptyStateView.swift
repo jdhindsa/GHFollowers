@@ -11,6 +11,9 @@ class GFEmptyStateView: UIView {
     
     let messageLabel = GFTitleLabel(textAlignment: .center, fontSize: 28)
     let logoImageView = UIImageView(frame: .zero)
+    var isSmallerPhone: Bool {
+        return DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,28 +25,29 @@ class GFEmptyStateView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(message: String) {
-        super.init(frame: .zero)
+    convenience init(message: String) {
+        self.init(frame: .zero)
         messageLabel.text = message
-        configure()
     }
     
     private func configure() {
         addSubview(messageLabel)
         addSubview(logoImageView)
-        
-        messageLabel.numberOfLines = 3
+        anchorMessageLabel()
+        anchorLogoImageView()
+    }
+    
+    private func anchorMessageLabel() {
+        messageLabel.numberOfLines = isSmallerPhone ? 4 : 3
         messageLabel.textColor = .secondaryLabel
-        logoImageView.image = UIImage(named: "empty-state-logo")
-        logoImageView.contentMode = .scaleAspectFit
-        
-        messageLabel.centerYInSuperview(shiftAboveCenterY: 150, identifier: "GFEmptyStateView.messageLabel.centerYAnchor")
+        let labelCenterYConstant: CGFloat = isSmallerPhone ? 80 : 150
+        messageLabel.centerYInSuperview(shiftAboveCenterY: labelCenterYConstant, identifier: "GFEmptyStateView.messageLabel.centerYAnchor")
         messageLabel.anchor(
             top: nil,
             leading: self.leadingAnchor,
             bottom: nil,
             trailing: self.trailingAnchor                       ,
-            identifier: "GFEmptyStateView.centerY.anchor",
+            identifier: "GFEmptyStateView.messageLabel.centerYAnchor",
             padding: .init(
                 top: 0,
                 left: 40,
@@ -52,7 +56,14 @@ class GFEmptyStateView: UIView {
             )
         )
         messageLabel.constrainHeightToConstant(200, identifier: "GFEmptyStateView.messageLabel.heightAnchor")
-        logoImageView.anchorWithSquareDimensions(multiplier: 1.3, identifier: "GFEmptyStateView.logoImageView.squareDimensionsAnchor")
+
+    }
+    
+    private func anchorLogoImageView() {
+        logoImageView.image = Images.emptyStateLogo
+        logoImageView.contentMode = .scaleAspectFit
+        let logoImageViewBottomConstant: CGFloat = isSmallerPhone ? -85 : -40
+        logoImageView.anchorAsSquareWithMatchingWidthAndHeightAnchors(multiplier: 1.3, identifier: "GFEmptyStateView.logoImageView.squareDimensionsAnchor")
         logoImageView.anchor(
             top: nil,
             leading: nil,
@@ -62,7 +73,7 @@ class GFEmptyStateView: UIView {
             padding: .init(
                 top: 0,
                 left: 0,
-                bottom: -40,
+                bottom: logoImageViewBottomConstant,
                 right: -170
             )
         )

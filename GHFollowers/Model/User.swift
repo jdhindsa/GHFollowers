@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  Follower.swift
 //  GHFollowers
 //
 //  Created by Jason Dhindsa on 2021-08-18.
@@ -15,8 +15,8 @@ struct User: Codable {
     var bio: String?
     let publicRepos: Int
     let publicGists: Int
-    let followers: Int
-    let following: Int
     let htmlUrl: String
-    let createdAt: String
+    let following: Int
+    let followers: Int
+    let createdAt: Date
 }

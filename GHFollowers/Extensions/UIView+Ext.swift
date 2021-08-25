@@ -9,7 +9,6 @@ import UIKit
 
 extension UIView {
     @discardableResult
-
     func anchor(
         top: NSLayoutYAxisAnchor?,
         leading: NSLayoutXAxisAnchor?,
@@ -39,18 +38,45 @@ extension UIView {
             anchoredConstraints.height = heightAnchor.constraint(equalToConstant: size.height)
         }
         
-        let constraintsArr: [NSLayoutConstraint?] = [anchoredConstraints.top, anchoredConstraints.leading, anchoredConstraints.bottom, anchoredConstraints.trailing, anchoredConstraints.width, anchoredConstraints.height]
+        let constraintsArr: [NSLayoutConstraint?] = [
+            anchoredConstraints.top,
+            anchoredConstraints.leading,
+            anchoredConstraints.bottom,
+            anchoredConstraints.trailing,
+            anchoredConstraints.width,
+            anchoredConstraints.height
+        ]
         constraintsArr.forEach {
             $0?.activate(withIdentifier: identifier)
         }
         return anchoredConstraints
     }
     
-    func anchorWithSquareDimensions(multiplier: CGFloat = 1.0, identifier: String) {
+    func centerYAnchorWithElement(_ elementYAnchor: NSLayoutYAxisAnchor?, identifier: String) {
+        translatesAutoresizingMaskIntoConstraints = false
+        if let elementYAnchor = elementYAnchor {
+            centerYAnchor.constraint(equalTo: elementYAnchor).activate(withIdentifier: identifier)
+        }
+    }
+    
+    func centerXAnchorWithElement(_ elementXAnchor: NSLayoutXAxisAnchor?, identifier: String) {
+        translatesAutoresizingMaskIntoConstraints = false
+        if let elementXAnchor = elementXAnchor {
+            centerXAnchor.constraint(equalTo: elementXAnchor).activate(withIdentifier: identifier)
+        }
+    }
+
+    func anchorAsSquareWithMatchingWidthAndHeightAnchors(multiplier: CGFloat = 1.0, identifier: String) {
         translatesAutoresizingMaskIntoConstraints = false
         if let superviewWidthAnchor = superview?.widthAnchor {
             heightAnchor.constraint(equalTo: superviewWidthAnchor, multiplier: multiplier).activate(withIdentifier: identifier)
         }
+    }
+    
+    func anchorAsSquareWithMatchingWidthAndHeightConstants(constant: CGFloat, identifier: String) {
+        translatesAutoresizingMaskIntoConstraints = false
+        heightAnchor.constraint(equalToConstant: constant).activate(withIdentifier: identifier)
+        widthAnchor.constraint(equalToConstant: constant).activate(withIdentifier: identifier)
     }
 
     func fillSuperview(identifier: String, padding: UIEdgeInsets = .zero)  {
@@ -143,5 +169,5 @@ extension UIView {
 }
 
 struct AnchoredConstraints {
-    var top, leading, bottom, trailing, width, height: NSLayoutConstraint?
+    var top, leading, bottom, trailing, width, height, centerX, centerY: NSLayoutConstraint?
 }

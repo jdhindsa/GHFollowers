@@ -12,10 +12,13 @@ class SearchVC: UIViewController {
     let logoImageView = UIImageView()
     let usernameTextField = GFTextField()
     let ctaButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
-    
+    var logoImageViewTopConstraint: NSLayoutConstraint!
     var isUsernameEntered: Bool {
         guard let enteredText = usernameTextField.text else { return false }
         return !enteredText.isEmpty
+    }
+    var isSmallerPhone: Bool {
+        return DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed
     }
 
     override func viewDidLoad() {
@@ -37,29 +40,34 @@ class SearchVC: UIViewController {
             presentGFAlertOnMainThread(title: "Empty Username", message: "Please enter a username.  We need to know who to look for 😇", buttonTitle: "OK")
             return
         }
-        let followerListVC = FollowerListVC()
-        followerListVC.username = usernameTextField.text
-        followerListVC.title = usernameTextField.text
+        usernameTextField.resignFirstResponder()
+        guard let username = usernameTextField.text else { return }
+        let followerListVC = FollowerListVC(username: username)
         navigationController?.pushViewController(followerListVC, animated: true)
+        usernameTextField.text?.removeAll()
     }
     
     private func createDismissKeyboardTapGesture() {
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
     }
     
     private func configureLogoImageView() {
         view.addSubview(logoImageView)
-        logoImageView.image = UIImage(named: "gh-logo")
+        logoImageView.image = Images.ghLogo
+        
+        let topConstraintConstant = isSmallerPhone ? 20 : 80
+        logoImageViewTopConstraint = logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CGFloat(topConstraintConstant))
+        logoImageViewTopConstraint.isActive = true
 
         logoImageView.anchor(
-            top: view.safeAreaLayoutGuide.topAnchor,
+            top: nil,
             leading: nil,
             bottom: nil,
             trailing: nil,
             identifier: "SearchVC.logoImageView.topAnchor",
             padding: .init(
-                top: 80,
+                top: 0,
                 left: 0,
                 bottom: 0,
                 right: 0)
