@@ -54,12 +54,7 @@ class GFUserInfoHeaderVC: UIViewController {
     }
 
     private func setupSubviews() {
-        view.addSubview(avatarImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(nameLabel)
-        view.addSubview(locationImageView)
-        view.addSubview(locationLabel)
-        view.addSubview(bioLabel)
+        view.addSubviews(avatarImageView, usernameLabel, nameLabel, locationImageView, locationLabel, bioLabel)
     }
 
     private func layoutUI() {
@@ -158,7 +153,7 @@ class GFUserInfoHeaderVC: UIViewController {
                 right: padding
             )
         )
-        bioLabel.constrainHeightToConstant(20, identifier: "GFUserInfoHeaderVC.bioLabel.heightConstraint")
+        bioLabel.constrainHeightToConstant(90, identifier: "GFUserInfoHeaderVC.bioLabel.heightConstraint")
     }
 
 }

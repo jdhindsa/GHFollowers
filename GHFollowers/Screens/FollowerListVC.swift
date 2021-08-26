@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol FollowerListVCDelegate: class {
-    func didRequestFollowers(for username: String)
-}
-
 class FollowerListVC: GFDataLoadingVC {
     
     enum Section {
@@ -25,6 +21,7 @@ class FollowerListVC: GFDataLoadingVC {
     var page = 1
     var hasMoreFollowers = true
     var isSearching = false
+    var isLoadingMoreFollowers = false
     
     init(username: String) {
         super.init(nibName: nil, bundle: nil)
@@ -98,6 +95,7 @@ class FollowerListVC: GFDataLoadingVC {
     
     private func getFollowers(username: String, page: Int) {
         self.showLoadingView()
+        isLoadingMoreFollowers = true
         NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
             guard let self = self else { return }
             self.dismissLoadingView()
@@ -115,6 +113,7 @@ class FollowerListVC: GFDataLoadingVC {
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Oops! I did it again!", message: error.rawValue, buttonTitle: "OK")
             }
+            self.isLoadingMoreFollowers = false
         }
     }
     
@@ -143,6 +142,8 @@ extension FollowerListVC: UICollectionViewDelegate {
         let offsetY = scrollView.contentOffset.y // How far is the user down in the vertical orientation from the origin of the scroll view
         let contentHeight = scrollView.contentSize.height // What is the height of the contentView
         let height = scrollView.frame.size.height // What is the height of the scrollView
+        
+        guard !isLoadingMoreFollowers else { return }
         
         if offsetY > contentHeight - height {
             guard hasMoreFollowers else { return }
@@ -175,7 +176,7 @@ extension FollowerListVC: UISearchResultsUpdating {
     }
 }
 
-extension FollowerListVC: FollowerListVCDelegate {
+extension FollowerListVC: UserInfoVCDelegate {
     func didRequestFollowers(for username: String) {
         // Get followers for username
         self.username = username
@@ -183,7 +184,7 @@ extension FollowerListVC: FollowerListVCDelegate {
         page = 1
         followers.removeAll()
         filteredFollowers.removeAll()
-        collectionView.setContentOffset(.zero, animated: true)
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
         getFollowers(username: username, page: 1)
     }
 }

@@ -36,10 +36,7 @@ class FavoritesListVC: GFDataLoadingVC {
                 } else {
                     self.favorites = favorites
                 }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.view.bringSubviewToFront(self.tableView)
-                }
+                self.tableView.reloadDataOnMainThread(shouldBringSubviewToFront: true, view: self.view)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
                 
@@ -59,6 +56,7 @@ class FavoritesListVC: GFDataLoadingVC {
         tableView.rowHeight = 80
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.removeExcessCells()
         tableView.register(FavoriteCell.self, forCellReuseIdentifier: FavoriteCell.reuseIdentifier())
     }
     
@@ -67,11 +65,12 @@ class FavoritesListVC: GFDataLoadingVC {
         tableView.deleteRows(at: [indexPath], with: .right)
     }
     
-    private func deleteFavoriteFromUserDefaults(favorite: Follower) {
+    private func deleteFavoriteFromUserDefaults(favorite: Follower, indexPath: IndexPath) {
         PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self](error) in
             guard let self = self else { return }
             guard let error = error else {
                 // The error was nil, so just return.
+                self.deleteFavoriteFromLocalDataModel(indexPath: indexPath)
                 return
             }
             // If there is an error, present an alert.
@@ -100,7 +99,6 @@ extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
         let favorite = favorites[indexPath.row]
-        deleteFavoriteFromLocalDataModel(indexPath: indexPath)
-        deleteFavoriteFromUserDefaults(favorite: favorite)
+        deleteFavoriteFromUserDefaults(favorite: favorite, indexPath: indexPath)
     }
 }

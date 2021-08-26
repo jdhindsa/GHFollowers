@@ -5,16 +5,16 @@
 //  Created by Jason Dhindsa on 2021-08-20.
 //
 
-// LEFT OFF AT 31:39 PLAYED OF "Child View Controller - UserInfoHeaderVC"
-
 import UIKit
 
 protocol UserInfoVCDelegate: class {
-    func didTapGitHubProfile(for user: User)
-    func didTapGetFollowers(for user: User)
+    func didRequestFollowers(for username: String)
 }
 
-class UserInfoVC: UIViewController {
+class UserInfoVC: GFDataLoadingVC {
+    
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     
     var username: String!
     let headerView = UIView()
@@ -22,11 +22,12 @@ class UserInfoVC: UIViewController {
     let itemViewTwo = UIView()
     let dateLabel = GFBodyLabel(textAlignment: .center)
     var itemViews: [UIView] = []
-    weak var delegate: FollowerListVCDelegate!
+    weak var delegate: UserInfoVCDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
+        configureScrollView()
         layoutUI()
         fetchUserInfo()
     }
@@ -51,25 +52,24 @@ class UserInfoVC: UIViewController {
         }
     }
     
+    private func configureScrollView() {
+        view.addSubviews(scrollView)
+        scrollView.addSubviews(contentView) // The contentView goes inside the scrollView
+        scrollView.fillSuperview(identifier: "UserInfoVC.scrollView.fillSuperview")
+        contentView.fillSuperview(identifier: "UserInfoVC.contentView.fillSuperview")
+        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).activate(withIdentifier: "UserInfoVC.contentView.widthAnchor")
+        contentView.heightAnchor.constraint(equalToConstant: 600).activate(withIdentifier: "UserInfoVC.contentView.heightAnchor")
+    }
+    
     private func configureUIElements(with user: User) {
-        
-        let repoItemVC = GFRepoItemVC(user: user)
-        repoItemVC.delegate = self
-        
-        let followerItemVC = GFFollowerItemVC(user: user)
-        followerItemVC.delegate = self
-        
         self.add(childVC: GFUserInfoHeaderVC(user: user), to: self.headerView)
-        self.add(childVC: repoItemVC, to: self.itemViewOne)
-        self.add(childVC: followerItemVC, to: self.itemViewTwo)
+        self.add(childVC: GFRepoItemVC(user: user, delegate: self), to: self.itemViewOne)
+        self.add(childVC: GFFollowerItemVC(user: user, delegate: self), to: self.itemViewTwo)
         self.dateLabel.text = "GitHubber since: \(user.createdAt.convertToMonthYearFormat())"
     }
     
     private func layoutUI() {
-        itemViews = [headerView, itemViewOne, itemViewTwo, dateLabel]
-        for itemView in itemViews {
-            view.addSubview(itemView)
-        }
+        contentView.addSubviews(headerView, itemViewOne, itemViewTwo, dateLabel)
         configureHeaderView()
         configureItemViewOne()
         configureItemViewTwo()
@@ -79,10 +79,10 @@ class UserInfoVC: UIViewController {
     private func configureHeaderView() {
         headerView.backgroundColor = .white
         headerView.anchor(
-            top: view.safeAreaLayoutGuide.topAnchor,
-            leading: view.safeAreaLayoutGuide.leadingAnchor,
+            top: contentView.topAnchor,
+            leading: contentView.leadingAnchor,
             bottom: nil,
-            trailing: view.safeAreaLayoutGuide.trailingAnchor,
+            trailing: contentView.trailingAnchor,
             identifier: "UserInfoVC.headerView.directionalAnchors",
             padding: .init(
                 top: 0,
@@ -91,7 +91,7 @@ class UserInfoVC: UIViewController {
                 right: 0
             )
         )
-        headerView.constrainHeightToConstant(180, identifier: "UserInfoVC.headerView.heightConstraint")
+        headerView.constrainHeightToConstant(210, identifier: "UserInfoVC.headerView.heightConstraint")
     }
 
     private func configureItemViewOne() {
@@ -142,7 +142,7 @@ class UserInfoVC: UIViewController {
                 right: 0
             )
         )
-        dateLabel.constrainHeightToConstant(18, identifier: "UserInfoVC.dateLabel.heightAnchor")
+        dateLabel.constrainHeightToConstant(50, identifier: "UserInfoVC.dateLabel.heightAnchor")
         dateLabel.centerXAnchorWithElement(itemViewTwo.centerXAnchor, identifier: "UserInfoVC.dateLabel.centerXAnchor")
     }
     
@@ -158,7 +158,7 @@ class UserInfoVC: UIViewController {
     }
 }
 
-extension UserInfoVC: UserInfoVCDelegate {
+extension UserInfoVC: GFRepoItemVCDelegate {
     func didTapGitHubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
             presentGFAlertOnMainThread(title: "Invalid URL", message: "The url attached to this user is invalid", buttonTitle: "OK")
@@ -166,7 +166,9 @@ extension UserInfoVC: UserInfoVCDelegate {
         }
         presentSafariVC(with: url)
     }
-    
+}
+
+extension UserInfoVC: GFFollowItemVCDelegate {
     func didTapGetFollowers(for user: User) {
         guard user.followers != 0 else {
             presentGFAlertOnMainThread(title: "No Followers", message: "This user has no followers, what a shame 😭", buttonTitle: "So Sad!")

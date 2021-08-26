@@ -8,6 +8,11 @@
 import UIKit
 
 extension UIView {
+    
+    func addSubviews(_ views: UIView...) {
+        for view in views { addSubview(view) }
+    }
+    
     @discardableResult
     func anchor(
         top: NSLayoutYAxisAnchor?,
@@ -119,7 +124,6 @@ extension UIView {
         } else if shiftRightCenterX > 0 {
             offset = shiftRightCenterX
         } else if shiftLeftCenterX > 0 && shiftRightCenterX > 0 {
-            // If both parameters were set to a value, then that must be a mistake and the offset is 0.
             offset = 0
         }
         if let superViewCenterXAnchor = superview?.centerXAnchor {
@@ -135,7 +139,6 @@ extension UIView {
         } else if shiftBelowCenterY > 0 {
             offset = shiftBelowCenterY
         } else if shiftAboveCenterY > 0 && shiftBelowCenterY > 0 {
-            // If both parameters were set to a value, then that must be a mistake and the offset is 0.
             offset = 0
         }
         if let centerY = superview?.centerYAnchor {
