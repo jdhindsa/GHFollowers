@@ -9,18 +9,23 @@ import UIKit
 
 class NetworkManager {
     static let shared = NetworkManager()
-    let baseURL = "https://api.github.com/users/"
+    let scheme = "https"
+    let host = "api.github.com"
     let cache = NSCache<NSString, UIImage>()
-    let perPageFollowers = "?per_page=100"
     
     func getFollowers(for username: String, page: Int, completion: @escaping (Result<[Follower], GFError>) -> Void) {
-        let endpoint = baseURL + "\(username)/followers\(perPageFollowers)&page=\(page)"
-        fetchData(endpoint: endpoint, completion: completion)
+        let resultsPerPage: URLQueryItem = URLQueryItem(name: "per_page", value: "100")
+        let pageToRetrieve: URLQueryItem = URLQueryItem(name: "page", value: "1")
+        fetchData(endpoint: generateEndpointURL(path: "/users/\(username)/followers", queryItems: [resultsPerPage, pageToRetrieve]), completion: completion)
     }
     
     func getUserInfo(for username: String, completion: @escaping (Result<User, GFError>) -> Void) {
-        let endpoint = baseURL + "\(username)"
-        fetchData(endpoint: endpoint, completion: completion)
+        fetchData(endpoint: generateEndpointURL(path: "/users/\(username)"), completion: completion)
+    }
+    
+    private func generateEndpointURL(path: String, queryItems: [URLQueryItem] = []) -> String {
+        let urlComponents = URLComponents()
+        return urlComponents.createEndpointURL(scheme: scheme, host: host, path: path, queryItems: queryItems)
     }
     
     func downloadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {

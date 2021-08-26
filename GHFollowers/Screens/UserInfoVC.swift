@@ -54,7 +54,7 @@ class UserInfoVC: GFDataLoadingVC {
     
     private func configureScrollView() {
         view.addSubviews(scrollView)
-        scrollView.addSubviews(contentView) // The contentView goes inside the scrollView
+        scrollView.addSubviews(contentView)
         scrollView.fillSuperview(identifier: "UserInfoVC.scrollView.fillSuperview")
         contentView.fillSuperview(identifier: "UserInfoVC.contentView.fillSuperview")
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).activate(withIdentifier: "UserInfoVC.contentView.widthAnchor")

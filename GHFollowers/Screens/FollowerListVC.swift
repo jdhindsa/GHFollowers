@@ -178,7 +178,6 @@ extension FollowerListVC: UISearchResultsUpdating {
 
 extension FollowerListVC: UserInfoVCDelegate {
     func didRequestFollowers(for username: String) {
-        // Get followers for username
         self.username = username
         title = username
         page = 1

@@ -11,9 +11,6 @@ class GFEmptyStateView: UIView {
     
     let messageLabel = GFTitleLabel(textAlignment: .center, fontSize: 28)
     let logoImageView = UIImageView(frame: .zero)
-    var isSmallerPhone: Bool {
-        return DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,9 +33,9 @@ class GFEmptyStateView: UIView {
     }
     
     private func anchorMessageLabel() {
-        messageLabel.numberOfLines = isSmallerPhone ? 4 : 3
+        messageLabel.numberOfLines = DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? 4 : 3
         messageLabel.textColor = .secondaryLabel
-        let labelCenterYConstant: CGFloat = isSmallerPhone ? 80 : 150
+        let labelCenterYConstant: CGFloat = DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? 80 : 150
         messageLabel.centerYInSuperview(shiftAboveCenterY: labelCenterYConstant, identifier: "GFEmptyStateView.messageLabel.centerYAnchor")
         messageLabel.anchor(
             top: nil,
@@ -60,7 +57,7 @@ class GFEmptyStateView: UIView {
     private func anchorLogoImageView() {
         logoImageView.image = Images.emptyStateLogo
         logoImageView.contentMode = .scaleAspectFit
-        let logoImageViewBottomConstant: CGFloat = isSmallerPhone ? -85 : -40
+        let logoImageViewBottomConstant: CGFloat = DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? -85 : -40
         logoImageView.anchorAsSquareWithMatchingWidthAndHeightAnchors(multiplier: 1.3, identifier: "GFEmptyStateView.logoImageView.squareDimensionsAnchor")
         logoImageView.anchor(
             top: nil,

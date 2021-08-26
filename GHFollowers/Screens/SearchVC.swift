@@ -17,9 +17,6 @@ class SearchVC: UIViewController {
         guard let enteredText = usernameTextField.text else { return false }
         return !enteredText.isEmpty
     }
-    var isSmallerPhone: Bool {
-        return DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +53,7 @@ class SearchVC: UIViewController {
         view.addSubview(logoImageView)
         logoImageView.image = Images.ghLogo
         
-        let topConstraintConstant = isSmallerPhone ? 20 : 80
+        let topConstraintConstant = DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? 20 : 80
         logoImageViewTopConstraint = logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CGFloat(topConstraintConstant))
         logoImageViewTopConstraint.isActive = true
 
