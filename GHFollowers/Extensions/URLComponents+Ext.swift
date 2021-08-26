@@ -16,7 +16,6 @@ extension URLComponents {
         components.queryItems = queryItems
 
         guard let constructedURL = components.url else { return "" }
-        let urlString = constructedURL.absoluteString
-        return urlString
+        return constructedURL.absoluteString
     }
 }
