@@ -81,7 +81,7 @@ class FollowerListVC: GFDataLoadingVC {
                 let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
                 PersistenceManager.updateWith(favorite: favorite, actionType: .add) { [weak self](error) in
                     guard let self = self else { return }
-                    guard let error = error else { // You need to unwrap the error as it is an optional
+                    guard let error = error else {
                         self.presentGFAlertOnMainThread(title: "Success!", message: "You have successfully favorited this user!", buttonTitle: "OK")
                         return
                     }
@@ -139,9 +139,9 @@ class FollowerListVC: GFDataLoadingVC {
 
 extension FollowerListVC: UICollectionViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let offsetY = scrollView.contentOffset.y // How far is the user down in the vertical orientation from the origin of the scroll view
-        let contentHeight = scrollView.contentSize.height // What is the height of the contentView
-        let height = scrollView.frame.size.height // What is the height of the scrollView
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
         
         guard !isLoadingMoreFollowers else { return }
         

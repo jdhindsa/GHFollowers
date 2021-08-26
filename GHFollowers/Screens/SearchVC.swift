@@ -80,7 +80,7 @@ class SearchVC: UIViewController {
     
     private func configureUsernameTextField() {
         view.addSubview(usernameTextField)
-        usernameTextField.delegate = self // I am the delegate of the text field's delegate
+        usernameTextField.delegate = self
         
         usernameTextField.anchor(
             top: logoImageView.bottomAnchor,

@@ -20,7 +20,6 @@ class GFEmptyStateView: UIView {
         configure()
     }
     
-    // Used if you are implementing the UIButton using a Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

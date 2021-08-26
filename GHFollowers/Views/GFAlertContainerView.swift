@@ -18,7 +18,7 @@ class GFAlertContainerView: UIView {
     }
     
     private func configure() {
-        backgroundColor = .systemBackground // Black in Dark Mode, White in Light Mode
+        backgroundColor = .systemBackground
         layer.cornerRadius = 16
         layer.borderWidth = 2
         layer.borderColor = UIColor.white.cgColor

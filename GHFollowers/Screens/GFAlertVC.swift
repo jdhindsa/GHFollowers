@@ -42,7 +42,6 @@ class GFAlertVC: UIViewController {
     private func configureContainerView() {
         view.addSubview(containerView)
         
-        // Setup Layout Anchors
         containerView.centerYInSuperview(identifier: "GFAlertVC.containerView.centerYAnchor")
         containerView.centerXInSuperview(identifier: "GFAlertVC.containerView.centerXAnchor")
         containerView.constrainWidthToConstant(280, identifier: "GFAlertVC.containerView.widthAnchor")
@@ -53,7 +52,6 @@ class GFAlertVC: UIViewController {
         containerView.addSubview(titleLabel)
         titleLabel.text = alertTitle ?? "Something went wrong"
         
-        // Setup Layout Anchors
         titleLabel.anchor(
             top: containerView.topAnchor,
             leading: containerView.leadingAnchor,
@@ -74,7 +72,6 @@ class GFAlertVC: UIViewController {
         actionButton.setTitle(buttonTitle ?? "", for: .normal)
         actionButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         
-        // Setup Layout Anchors
         actionButton.anchor(
             top: nil,
             leading: containerView.leadingAnchor,
@@ -95,7 +92,6 @@ class GFAlertVC: UIViewController {
         messageLabel.text = message ?? "Unable to complete request"
         messageLabel.numberOfLines = 4
         
-        // Setup Layout Anchors
         messageLabel.anchor(
             top: titleLabel.topAnchor,
             leading: containerView.leadingAnchor,

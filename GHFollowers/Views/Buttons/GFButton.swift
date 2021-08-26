@@ -5,9 +5,6 @@
 //  Created by Jason Dhindsa on 2021-08-17.
 //
 
-// Useful link:
-// https://github.com/cocoacontrols/SemanticUI
-
 import UIKit
 
 class GFButton: UIButton {
@@ -16,7 +13,6 @@ class GFButton: UIButton {
         configure()
     }
     
-    // Used if you are implementing the UIButton using a Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

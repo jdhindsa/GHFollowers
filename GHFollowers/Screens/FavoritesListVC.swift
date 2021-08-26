@@ -69,11 +69,9 @@ class FavoritesListVC: GFDataLoadingVC {
         PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self](error) in
             guard let self = self else { return }
             guard let error = error else {
-                // The error was nil, so just return.
                 self.deleteFavoriteFromLocalDataModel(indexPath: indexPath)
                 return
             }
-            // If there is an error, present an alert.
             self.presentGFAlertOnMainThread(title: "Unable to remove", message: error.rawValue, buttonTitle: "OK")
         }
     }

@@ -14,7 +14,6 @@ class GFItemInfoVC: UIViewController {
     let itemInfoViewTwo = GFItemInfoView()
     let actionButton = GFButton()
     var user: User!
-//    weak var delegate: ItemInfoVCDelegate!
     
     init(user: User) {
         super.init(nibName: nil, bundle: nil)
@@ -48,7 +47,7 @@ class GFItemInfoVC: UIViewController {
     }
     
     @objc func actionButtonTapped() {
-        // This is empty because we will override this method in the subclass.
+        // Empty Implementation -> Will override this method in the subclass.
     }
     
     private func layoutUI() {
