@@ -58,7 +58,7 @@ class UserInfoVC: GFDataLoadingVC {
         scrollView.fillSuperview(identifier: "UserInfoVC.scrollView.fillSuperview")
         contentView.fillSuperview(identifier: "UserInfoVC.contentView.fillSuperview")
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).activate(withIdentifier: "UserInfoVC.contentView.widthAnchor")
-        contentView.heightAnchor.constraint(equalToConstant: 600).activate(withIdentifier: "UserInfoVC.contentView.heightAnchor")
+        contentView.constrainHeightToConstant(600, identifier: "UserInfoVC.contentView.heightAnchor")
     }
     
     private func configureUIElements(with user: User) {

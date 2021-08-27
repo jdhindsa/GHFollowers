@@ -24,8 +24,7 @@ class NetworkManager {
     }
     
     private func generateEndpointURL(path: String, queryItems: [URLQueryItem] = []) -> String {
-        let urlComponents = URLComponents()
-        return urlComponents.createEndpointURL(scheme: scheme, host: host, path: path, queryItems: queryItems)
+        return URLComponents.createEndpointURL(scheme: scheme, host: host, path: path, queryItems: queryItems)
     }
     
     func downloadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {

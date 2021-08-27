@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLComponents {
-    func createEndpointURL(scheme: String, host: String, path: String, queryItems: [URLQueryItem]) -> String {
+    static func createEndpointURL(scheme: String, host: String, path: String, queryItems: [URLQueryItem]) -> String {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host

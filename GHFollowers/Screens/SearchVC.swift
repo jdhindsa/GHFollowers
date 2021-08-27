@@ -12,7 +12,6 @@ class SearchVC: UIViewController {
     let logoImageView = UIImageView()
     let usernameTextField = GFTextField()
     let ctaButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
-    var logoImageViewTopConstraint: NSLayoutConstraint!
     var isUsernameEntered: Bool {
         guard let enteredText = usernameTextField.text else { return false }
         return !enteredText.isEmpty
@@ -53,23 +52,18 @@ class SearchVC: UIViewController {
         view.addSubview(logoImageView)
         logoImageView.image = Images.ghLogo
         
-        let topConstraintConstant = DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? 20 : 80
-        logoImageViewTopConstraint = logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CGFloat(topConstraintConstant))
-        logoImageViewTopConstraint.isActive = true
-
         logoImageView.anchor(
-            top: nil,
+            top: view.safeAreaLayoutGuide.topAnchor,
             leading: nil,
             bottom: nil,
             trailing: nil,
             identifier: "SearchVC.logoImageView.topAnchor",
             padding: .init(
-                top: 0,
+                top: DeviceTypes.isiPhoneSEOriPhone8Zoomed() ? 20 : 80,
                 left: 0,
                 bottom: 0,
                 right: 0)
         )
-        
         logoImageView.centerXInSuperview(identifier: "SearchVC.logoImageView.centerXInSuperview")
         logoImageView.constrainHeightToConstant(200, identifier: "SearchVC.logoImageView.heightAnchor")
         logoImageView.constrainWidthToConstant(200, identifier: "SearchVC.logoImageView.widthAnchor")
@@ -110,7 +104,6 @@ class SearchVC: UIViewController {
                 bottom: 50,
                 right: 50)
         )
-
         ctaButton.constrainHeightToConstant(50, identifier: "SearchVC.ctaButton.heightAnchor")
     }
 }
